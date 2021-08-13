@@ -14,6 +14,9 @@ import {
   LoadingOutlined,
   DeleteOutlined,
   EditOutlined,
+  CheckCircleOutlined,
+  CloseCircleOutlined,
+  SettingOutlined,
 } from '@ant-design/icons';
 
 // Action Imports
@@ -111,39 +114,41 @@ const RecipientTable = ({
   };
 
   const columns = [
+    // {
+    //   title: 'First Name',
+    //   dataIndex: 'first_name',
+    //   key: 'first_name',
+    //   filteredValue: filteredInfo.recipient_first_name || null,
+    //   onFilter: (value, record) => record.recipient_first_name.includes(value),
+    //   sorter: (a, b) =>
+    //     a.recipient_first_name.localeCompare(b.recipient_first_name),
+    //   sortOrder: sortedInfo.columnKey === 'first_name' && sortedInfo.order,
+    //   ellipsis: true,
+    //   editable: true,
+    //   render: (_, record) => {
+    //     const editable = isEditing(record);
+    //     return editable ? (
+    //       <Form.Item
+    //         first_name="first_name"
+    //         style={{ margin: 0 }}
+    //         rules={[
+    //           {
+    //             required: true,
+    //             message: `Please input a first name!`,
+    //           },
+    //         ]}
+    //       >
+    //         <Input value={record.recipient_first_name} />
+    //       </Form.Item>
+    //     ) : (
+    //       <>{record.recipient_first_name}</>
+    //     );
+    //   },
+    // },
+
+    // The name is sort by its last name
     {
-      title: 'First Name',
-      dataIndex: 'first_name',
-      key: 'first_name',
-      filteredValue: filteredInfo.recipient_first_name || null,
-      onFilter: (value, record) => record.recipient_first_name.includes(value),
-      sorter: (a, b) =>
-        a.recipient_first_name.localeCompare(b.recipient_first_name),
-      sortOrder: sortedInfo.columnKey === 'first_name' && sortedInfo.order,
-      ellipsis: true,
-      editable: true,
-      render: (_, record) => {
-        const editable = isEditing(record);
-        return editable ? (
-          <Form.Item
-            first_name="first_name"
-            style={{ margin: 0 }}
-            rules={[
-              {
-                required: true,
-                message: `Please input a first name!`,
-              },
-            ]}
-          >
-            <Input value={record.recipient_first_name} />
-          </Form.Item>
-        ) : (
-          <>{record.recipient_first_name}</>
-        );
-      },
-    },
-    {
-      title: 'Last Name',
+      title: 'Name',
       dataIndex: 'last_name',
       key: 'last_name',
       filteredValue: filteredInfo.recipient_last_name || null,
@@ -169,7 +174,7 @@ const RecipientTable = ({
             <Input value={record.recipient_last_name} />
           </Form.Item>
         ) : (
-          <>{record.recipient_last_name}</>
+          <>{`${record.recipient_first_name}, ${record.recipient_last_name}`}</>
         );
       },
     },
@@ -208,6 +213,7 @@ const RecipientTable = ({
     {
       title: 'Gender',
       dataIndex: 'gender',
+      width: 100,
       key: 'gender',
       filters: [
         { text: 'Male', value: 'Male' },
@@ -287,6 +293,7 @@ const RecipientTable = ({
       title: 'Ethnicity',
       dataIndex: 'ethnicity',
       key: 'ethnicity',
+      width: 150,
       filters: [
         { text: 'Hispanic', value: 'Hispanic' },
         { text: 'Non-Hispanic', value: 'Non-Hispanic' },
@@ -317,9 +324,10 @@ const RecipientTable = ({
       },
     },
     {
-      title: 'Veteran Status',
+      title: 'Veteran',
       dataIndex: 'recipient_veteran_status',
       key: 'recipient_veteran_status',
+      width: 100,
       filters: [
         { text: 'Veteran', value: true },
         { text: 'Not a Veteran', value: false },
@@ -345,7 +353,9 @@ const RecipientTable = ({
             <Input value={record.recipient_veteran_status} />
           </Form.Item>
         ) : (
-          <>{record.recipient_veteran_status ? 'Yes' : 'No'}</>
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+            {record.recipient_veteran_status ? 'Yes' : 'No'}
+          </div>
         );
       },
     },
@@ -380,44 +390,63 @@ const RecipientTable = ({
       },
     },
     {
-      title: 'Actions',
-      dataIndex: 'actions',
-      key: 'actions',
+      title: 'Qualify',
+      dataIndex: 'qualify_status',
+      key: 'qualify_status',
+      width: 100,
+      filters: [
+        { text: 'Yes', value: true },
+        { text: 'No', value: false },
+      ],
+      filteredValue: filteredInfo.qualify_status || null,
+      onFilter: (value, record) => record.qualify_status === value,
+      sortOrder: sortedInfo.columnKey === 'qualify_status' && sortedInfo.order,
+      ellipsis: true,
+      editable: true,
       render: (_, record) => {
         const editable = isEditing(record);
         return editable ? (
-          <span>
-            <Space size="middle">
-              <button
-                onClick={() => save(record.id)}
-                style={{ color: '#1890FF', marginRight: 8 }}
-              >
-                Save
-              </button>
-              <Popconfirm title="Sure to cancel?" onConfirm={cancel}>
-                <button style={{ color: '#1890FF' }}>Cancel</button>
-              </Popconfirm>
-            </Space>
-          </span>
+          <Form.Item
+            name="qualify_status"
+            style={{ margin: 0 }}
+            rules={[
+              {
+                required: true,
+                message: 'Please select a qualify status',
+              },
+            ]}
+          >
+            <Input value={record.qualify_status} />
+          </Form.Item>
         ) : (
-          <Space size="large">
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+            {record.qualify_status ? (
+              <CheckCircleOutlined style={{ color: '#53c31b' }} />
+            ) : (
+              <CloseCircleOutlined style={{ color: '#FF4848' }} />
+            )}
+          </div>
+        );
+      },
+    },
+    {
+      title: 'Setting',
+      dataIndex: 'setting',
+      key: 'setting',
+      width: 70,
+      render: (_, record) => {
+        return (
+          <Space
+            size="large"
+            style={{ display: 'flex', justifyContent: 'center' }}
+          >
             <Typography.Link
               disabled={editingKey !== ''}
               style={{ color: '#1890FF' }}
-              onClick={() => edit(record)}
+              onClick={() => alert('Setting button is clicked')}
             >
-              {<EditOutlined />}
+              {<SettingOutlined />}
             </Typography.Link>
-
-            <Popconfirm
-              title="Sure to delete?"
-              onConfirm={() => {
-                deleteRecipient(record.recipient_id);
-              }}
-              danger
-            >
-              {<DeleteOutlined />}
-            </Popconfirm>
           </Space>
         );
       },
@@ -426,6 +455,7 @@ const RecipientTable = ({
 
   return (
     <div style={{}}>
+      {console.log(recipients)}
       {recipients.length < 1 && <LoadingOutlined className="loader" />},
       {recipients.length >= 1 && (
         <Form form={form} className="recipient-table">
@@ -442,7 +472,7 @@ const RecipientTable = ({
             dataSource={recipients}
             size="small"
             tableLayout="fixed"
-            rowKey={record => record.id}
+            rowKey={record => record.recipient_id}
           />
         </Form>
       )}
