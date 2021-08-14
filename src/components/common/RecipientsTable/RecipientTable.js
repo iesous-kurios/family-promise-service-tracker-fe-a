@@ -114,39 +114,6 @@ const RecipientTable = ({
   };
 
   const columns = [
-    // {
-    //   title: 'First Name',
-    //   dataIndex: 'first_name',
-    //   key: 'first_name',
-    //   filteredValue: filteredInfo.recipient_first_name || null,
-    //   onFilter: (value, record) => record.recipient_first_name.includes(value),
-    //   sorter: (a, b) =>
-    //     a.recipient_first_name.localeCompare(b.recipient_first_name),
-    //   sortOrder: sortedInfo.columnKey === 'first_name' && sortedInfo.order,
-    //   ellipsis: true,
-    //   editable: true,
-    //   render: (_, record) => {
-    //     const editable = isEditing(record);
-    //     return editable ? (
-    //       <Form.Item
-    //         first_name="first_name"
-    //         style={{ margin: 0 }}
-    //         rules={[
-    //           {
-    //             required: true,
-    //             message: `Please input a first name!`,
-    //           },
-    //         ]}
-    //       >
-    //         <Input value={record.recipient_first_name} />
-    //       </Form.Item>
-    //     ) : (
-    //       <>{record.recipient_first_name}</>
-    //     );
-    //   },
-    // },
-
-    // The name is sort by its last name
     {
       title: 'Name',
       dataIndex: 'last_name',
@@ -159,21 +126,7 @@ const RecipientTable = ({
       ellipsis: true,
       editable: true,
       render: (_, record) => {
-        const editable = isEditing(record);
-        return editable ? (
-          <Form.Item
-            last_name="last_name"
-            style={{ margin: 0 }}
-            rules={[
-              {
-                required: true,
-                message: `Please input a last name!`,
-              },
-            ]}
-          >
-            <Input value={record.recipient_last_name} />
-          </Form.Item>
-        ) : (
+        return (
           <>{`${record.recipient_first_name}, ${record.recipient_last_name}`}</>
         );
       },
@@ -182,6 +135,7 @@ const RecipientTable = ({
       title: 'Date of Birth',
       dataIndex: 'Date of Birth',
       key: 'Date of Birth',
+      width: 140,
       filteredValue: filteredInfo.recipient_date_of_birth || null,
       onFilter: (value, record) =>
         record.recipient_date_of_birth.includes(value),
@@ -191,22 +145,10 @@ const RecipientTable = ({
       ellipsis: true,
       editable: true,
       render: (_, record) => {
-        const editable = isEditing(record);
-        return editable ? (
-          <Form.Item
-            name="Date of Birth"
-            style={{ margin: 0 }}
-            rules={[
-              {
-                required: true,
-                message: `Please input an date of birth!`,
-              },
-            ]}
-          >
-            <Input value={record.recipient_date_of_birth} />
-          </Form.Item>
-        ) : (
-          <>{record.recipient_date_of_birth}</>
+        return (
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+            {record.recipient_date_of_birth}
+          </div>
         );
       },
     },
@@ -226,27 +168,7 @@ const RecipientTable = ({
       ellipsis: true,
       editable: true,
       render: (_, record) => {
-        const editable = isEditing(record);
-        return editable ? (
-          <Form.Item
-            name="gender"
-            style={{ margin: 0 }}
-            rules={[
-              {
-                required: true,
-                message: 'Please select a gender',
-              },
-            ]}
-          >
-            <Select placeholder="Please select their gender">
-              <Select.Option value="male">Male</Select.Option>
-              <Select.Option value="female">Female</Select.Option>
-              <Select.Option value="nonbinary">Non-Binary Gender</Select.Option>
-            </Select>
-          </Form.Item>
-        ) : (
-          <>{record.gender}</>
-        );
+        return <>{record.gender}</>;
       },
     },
     {
@@ -270,23 +192,7 @@ const RecipientTable = ({
       ellipsis: true,
       editable: true,
       render: (_, record) => {
-        const editable = isEditing(record);
-        return editable ? (
-          <Form.Item
-            name="race"
-            style={{ margin: 0 }}
-            rules={[
-              {
-                required: true,
-                message: 'Please select a race',
-              },
-            ]}
-          >
-            <Input value={record.race} />
-          </Form.Item>
-        ) : (
-          <>{record.race}</>
-        );
+        return <>{record.race}</>;
       },
     },
     {
@@ -304,23 +210,7 @@ const RecipientTable = ({
       ellipsis: true,
       editable: true,
       render: (_, record) => {
-        const editable = isEditing(record);
-        return editable ? (
-          <Form.Item
-            name="ethnicity"
-            style={{ margin: 0 }}
-            rules={[
-              {
-                required: true,
-                message: 'Please select an ethnicity',
-              },
-            ]}
-          >
-            <Input value={record.ethnicity} />
-          </Form.Item>
-        ) : (
-          <>{record.ethnicity}</>
-        );
+        return <>{record.ethnicity}</>;
       },
     },
     {
@@ -338,21 +228,7 @@ const RecipientTable = ({
       ellipsis: true,
       editable: true,
       render: (_, record) => {
-        const editable = isEditing(record);
-        return editable ? (
-          <Form.Item
-            name="veteran_status"
-            style={{ margin: 0 }}
-            rules={[
-              {
-                required: true,
-                message: 'Please select a veteran status',
-              },
-            ]}
-          >
-            <Input value={record.recipient_veteran_status} />
-          </Form.Item>
-        ) : (
+        return (
           <div style={{ display: 'flex', justifyContent: 'center' }}>
             {record.recipient_veteran_status ? 'Yes' : 'No'}
           </div>
@@ -370,57 +246,27 @@ const RecipientTable = ({
       ellipsis: true,
       editable: true,
       render: (_, record) => {
-        const editable = isEditing(record);
-        return editable ? (
-          <Form.Item
-            name="household_id"
-            style={{ margin: 0 }}
-            rules={[
-              {
-                required: true,
-                message: 'Please input the household size',
-              },
-            ]}
-          >
-            <Input value={record.household_id} />
-          </Form.Item>
-        ) : (
-          <>{record.household_id}</>
-        );
+        return <>{record.household_id}</>;
       },
     },
     {
-      title: 'Qualify',
-      dataIndex: 'qualify_status',
-      key: 'qualify_status',
+      title: 'Active',
+      dataIndex: 'active_status',
+      key: 'active_status',
       width: 100,
       filters: [
         { text: 'Yes', value: true },
         { text: 'No', value: false },
       ],
-      filteredValue: filteredInfo.qualify_status || null,
-      onFilter: (value, record) => record.qualify_status === value,
-      sortOrder: sortedInfo.columnKey === 'qualify_status' && sortedInfo.order,
+      filteredValue: filteredInfo.active_status || null,
+      onFilter: (value, record) => record.active_status === value,
+      sortOrder: sortedInfo.columnKey === 'active_status' && sortedInfo.order,
       ellipsis: true,
       editable: true,
       render: (_, record) => {
-        const editable = isEditing(record);
-        return editable ? (
-          <Form.Item
-            name="qualify_status"
-            style={{ margin: 0 }}
-            rules={[
-              {
-                required: true,
-                message: 'Please select a qualify status',
-              },
-            ]}
-          >
-            <Input value={record.qualify_status} />
-          </Form.Item>
-        ) : (
+        return (
           <div style={{ display: 'flex', justifyContent: 'center' }}>
-            {record.qualify_status ? (
+            {record.active_status ? (
               <CheckCircleOutlined style={{ color: '#53c31b' }} />
             ) : (
               <CloseCircleOutlined style={{ color: '#FF4848' }} />
@@ -443,7 +289,9 @@ const RecipientTable = ({
             <Typography.Link
               disabled={editingKey !== ''}
               style={{ color: '#1890FF' }}
-              onClick={() => alert('Setting button is clicked')}
+              onClick={() =>
+                alert(`Data with ${record.recipient_id} is clicked`)
+              }
             >
               {<SettingOutlined />}
             </Typography.Link>
@@ -455,7 +303,6 @@ const RecipientTable = ({
 
   return (
     <div style={{}}>
-      {console.log(recipients)}
       {recipients.length < 1 && <LoadingOutlined className="loader" />},
       {recipients.length >= 1 && (
         <Form form={form} className="recipient-table">
