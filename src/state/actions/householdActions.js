@@ -31,7 +31,7 @@ export const DELETE_HOUSEHOLD_RESOLVE = 'DELETE_HOUSEHOLD_START';
 
 export const getAllHouseholdAction = () => dispatch => {
   dispatch({ type: GET_ALL_HOUSEHOLD_START });
-
+  console.log('Trigger!!!');
   axiosWithAuth()
     .get(`/api/households`)
     .then(res => {

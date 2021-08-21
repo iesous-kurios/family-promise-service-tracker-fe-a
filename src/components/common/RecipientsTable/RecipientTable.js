@@ -1,19 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import {
-  Table,
-  Input,
-  Typography,
-  Form,
-  Space,
-  Popconfirm,
-  Select,
-  Button,
-} from 'antd';
+import EditRecipientForm from '../../forms/EditRecipientForm';
+import { Table, Typography, Form, Space, Button } from 'antd';
 import {
   LoadingOutlined,
-  DeleteOutlined,
-  EditOutlined,
   CheckCircleOutlined,
   CloseCircleOutlined,
   SettingOutlined,
@@ -40,6 +30,8 @@ const RecipientTable = ({
   const [editingKey, setEditingKey] = useState('');
   const [sortedInfo, setSortedInfo] = useState('');
   const [filteredInfo, setFilteredInfo] = useState('');
+  const [editing, setEditing] = useState(false);
+  const [key, setKey] = useState('');
 
   const handleChange = (pagination, filters, sorter) => {
     setSortedInfo(sorter);
@@ -77,27 +69,6 @@ const RecipientTable = ({
     // just an two moves, one is use axio call to perform a specific move
     // and then grab all the data again.
   }, [change, getAllHouseholdAction, getAllRecipientAction]);
-
-  const isEditing = record => record.id === editingKey;
-
-  const edit = record => {
-    form.setFieldsValue({
-      first_name: '',
-      last_name: '',
-      age: '',
-      gender: '',
-      race: '',
-      ethnicity: '',
-      veteran_status: '',
-      household_id: [],
-      ...record,
-    });
-    setEditingKey(record.id);
-  };
-
-  const cancel = () => {
-    setEditingKey('');
-  };
 
   const deleteRecipient = key => {
     deleteRecipientAction(key);
@@ -289,9 +260,10 @@ const RecipientTable = ({
             <Typography.Link
               disabled={editingKey !== ''}
               style={{ color: '#1890FF' }}
-              onClick={() =>
-                alert(`Data with ${record.recipient_id} is clicked`)
-              }
+              onClick={() => {
+                setKey(record.recipient_id);
+                setEditing(true);
+              }}
             >
               {<SettingOutlined />}
             </Typography.Link>
@@ -303,6 +275,16 @@ const RecipientTable = ({
 
   return (
     <div style={{}}>
+      <EditRecipientForm
+        visible={editing}
+        onCreate={() => {
+          alert('This is submited');
+        }}
+        onCancel={() => {
+          setEditing(false);
+        }}
+        recipient_id={key}
+      />
       {recipients.length < 1 && <LoadingOutlined className="loader" />},
       {recipients.length >= 1 && (
         <Form form={form} className="recipient-table">

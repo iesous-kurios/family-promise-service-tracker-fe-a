@@ -51,6 +51,7 @@ function RenderRecipientsPage({
         <Button
           type="primary"
           onClick={() => {
+            getAllHouseholdAction();
             setVisible(true);
           }}
         >

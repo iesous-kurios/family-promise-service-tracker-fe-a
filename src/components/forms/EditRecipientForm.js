@@ -1,30 +1,42 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { Form, Input, Select, DatePicker, Radio, Modal } from 'antd';
+import { Form, Input, Select, InputNumber, Radio, Modal } from 'antd';
 
-import { addRecipientAction } from '../../state/actions/recipientActions';
+import { getRecipientByIdAction } from '../../state/actions/recipientActions';
 
 const { Option } = Select;
 
-function AddRecipientForm({ visible, onCreate, onCancel, households }) {
+function EditRecipientForm({
+  visible,
+  onCreate,
+  onCancel,
+  recipient_id,
+  recipient,
+}) {
   const [form] = Form.useForm();
+  const [editRecipient, setEditRecipient] = useState(null);
 
+  useEffect(() => {
+    getRecipientByIdAction(recipient_id);
+    setEditRecipient(recipient);
+    console.log(recipient);
+  }, []);
   return (
     <>
-      {console.log(households)}
       <Modal
         width="80%"
         visible={visible}
-        title="Create New Recipient"
-        okText="Create Recipient"
+        title="Edit Recipient"
+        okText="Save"
         cancelText="Cancel"
         onCancel={onCancel}
         onOk={() => {
           form
             .validateFields()
             .then(values => {
-              onCreate(values);
+              console.log(recipient);
               form.resetFields();
+              onCreate(values);
             })
             .catch(info => {
               console.log('Validate Failed', info);
@@ -52,18 +64,6 @@ function AddRecipientForm({ visible, onCreate, onCancel, households }) {
             <Input placeholder="Enter First Name" size="large" />
           </Form.Item>
           <Form.Item
-            label="Middle Name"
-            name="recipient_middle_name"
-            rules={[
-              {
-                required: true,
-                message: "Please enter the Recipient's First Name",
-              },
-            ]}
-          >
-            <Input placeholder="Enter First Name" size="large" />
-          </Form.Item>
-          <Form.Item
             label="Last Name"
             name="recipient_last_name"
             rules={[
@@ -76,18 +76,18 @@ function AddRecipientForm({ visible, onCreate, onCancel, households }) {
             <Input placeholder="Enter Last Name" size="large" />
           </Form.Item>
           <Form.Item
-            label="Date of Birth"
-            name="recipient_date_of_birth"
+            label="Age"
+            name="age"
             rules={[
               {
                 required: true,
               },
             ]}
           >
-            <DatePicker format="YYYY-MM-DD" />
+            <InputNumber size="large" placeholder="0" min="0" max="130" />
           </Form.Item>
           <Form.Item
-            name="gender_id"
+            name="gender"
             label="Select Gender"
             hasFeedback
             rules={[
@@ -98,13 +98,13 @@ function AddRecipientForm({ visible, onCreate, onCancel, households }) {
             ]}
           >
             <Select placeholder="Please select their gender">
-              <Option value={1}>Female</Option>
-              <Option value={2}>Male</Option>
-              <Option value={3}>Non-Binary Gender</Option>
+              <Option value="male">Male</Option>
+              <Option value="female">Female</Option>
+              <Option value="nonbinary">Non-Binary Gender</Option>
             </Select>
           </Form.Item>
           <Form.Item
-            name="race_id"
+            name="race"
             label="Select Race"
             rules={[
               {
@@ -118,44 +118,45 @@ function AddRecipientForm({ visible, onCreate, onCancel, households }) {
               // mode="multiple" - limiting race to 1 temporarily to test Create Recipient
               placeholder="Please select the race of the recipient"
             >
-              <Option value={1}>White/Caucasian</Option>
-              <Option value={2}>Black/African American</Option>
-              <Option value={3}>Asian</Option>
-              <Option value={4}>Native Hawaiian or Pacific Islander</Option>
-              <Option value={5}>Some other race</Option>
+              <Option value="indian_native_alaskan">
+                American Indian or Alaska Native
+              </Option>
+              <Option value="asian">Asian</Option>
+              <Option value="black">Black/African American</Option>
+              <Option value="hawaiian_pacific_islander">
+                Native Hawaiian or Pacific Islander
+              </Option>
+              <Option value="white">White/Caucasian</Option>
             </Select>
           </Form.Item>
-          <Form.Item label="Select Ethnicity" name="ethnicity_id">
+          <Form.Item label="Select Ethnicity" name="ethnicity">
             <Radio.Group>
-              <Radio value={1}>Hispanic or Latino</Radio>
-              <Radio value={2}>Not Hispanic or Latino</Radio>
+              <Radio value="hispanic">Hispanic or Latino</Radio>
+              <Radio value="not_hispanic">Not Hispanic or Latino</Radio>
             </Radio.Group>
           </Form.Item>
-          <Form.Item
-            label="Select Veteran Status"
-            name="recipient_veteran_status"
-          >
+          <Form.Item label="Select Veteran Status" name="veteran_status">
             <Radio.Group>
               <Radio value="true">Veteran</Radio>
               <Radio value="false">Not a Veteran</Radio>
             </Radio.Group>
           </Form.Item>
-          <Form.Item label="Select Recipient Address" name="household_id">
-            <Select size="large" placeholder="Select Address">
-              {households.map(household => (
-                <Select.Option
-                  key={household.household_id}
-                  value={household.household_id}
-                >
-                  {household.address +
-                    ', ' +
-                    household.city +
-                    ', ' +
-                    household.state}
-                </Select.Option>
-              ))}
-            </Select>
-          </Form.Item>
+          {/* <Form.Item label="Select Recipient Address" name="household_id">
+                        <Select size="large" placeholder="Select Address">
+                            {households.map(household => (
+                                <Select.Option
+                                    key={household.household_id}
+                                    value={household.household_id}
+                                >
+                                    {household.address +
+                                        ', ' +
+                                        household.city +
+                                        ', ' +
+                                        household.state}
+                                </Select.Option>
+                            ))}
+                        </Select>
+                    </Form.Item> */}
         </Form>
       </Modal>
     </>
@@ -164,10 +165,10 @@ function AddRecipientForm({ visible, onCreate, onCancel, households }) {
 
 const mapStateToProps = state => {
   return {
-    households: state.household.households,
+    recipient: state.recipient.recipient,
   };
 };
 
 export default connect(mapStateToProps, {
-  addRecipientAction,
-})(AddRecipientForm);
+  getRecipientByIdAction,
+})(EditRecipientForm);
