@@ -11,7 +11,6 @@ function AddRecipientForm({ visible, onCreate, onCancel, households }) {
 
   return (
     <>
-      {console.log(households)}
       <Modal
         width="80%"
         visible={visible}
