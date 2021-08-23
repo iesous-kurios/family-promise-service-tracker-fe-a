@@ -77,7 +77,7 @@ export const serviceTypeReducer = (state = initialServiceTypeState, action) => {
         ...state,
         status: 'Resolved',
       };
-    //add service
+    //add service type
     case ADD_SERVICE_TYPE_START:
       return {
         ...state,
