@@ -29,8 +29,11 @@ import {
   addRecipientAction,
   editRecipientAction,
   deleteRecipientAction,
+  getServiceProviders,
 } from '../../../state/actions';
 import TextArea from 'antd/lib/input/TextArea';
+
+getServiceProviders(); // populate Service Providers
 
 const ServicesTable = ({
   deleteServiceAction,
@@ -365,7 +368,8 @@ const ServicesTable = ({
 
   return (
     <div className="servicesTable">
-      {console.log('LOOK HERE', services)}
+      {console.log('LOOK HERE', recipients)}
+      {console.log('LOOK HERE ALSO', serviceProviders)}
       {services.length < 1 && <LoadingOutlined className="loader" />}
       {services.length >= 1 && (
         <Form form={form}>
